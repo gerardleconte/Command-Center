@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Command Center</title>
+<style>
+:root {
+  --q1:#ff2d55;--q1-bg:#1a0010;--q1-border:#3d0025;--q1-glow:rgba(255,45,85,.35);
+  --q2:#00e5ff;--q2-bg:#001820;--q2-border:#003040;--q2-glow:rgba(0,229,255,.3);
+  --q3:#ffd60a;--q3-bg:#191300;--q3-border:#3d3000;--q3-glow:rgba(255,214,10,.3);
+  --q4:#bf5af2;--q4-bg:#0d0018;--q4-border:#280040;--q4-glow:rgba(191,90,242,.3);
+  --bg:#07070f;--surface:#0f0f1c;--border:#1c1c30;
+  --text:#e8e8ff;--muted:#8888aa;--light:#44446a;
+  --accent:#818cf8;--accent-bg:#1a1a35;
+  --r:10px;--r-sm:7px;
+  --sh:0 1px 8px rgba(0,0,0,.4);
+  --sh-md:0 4px 20px rgba(0,0,0,.6);
+  --sh-lg:0 20px 60px rgba(0,0,0,.8),0 4px 20px rgba(0,0,0,.5);
+  --panel:440px;--hh:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;font-size:14.5px;line-height:1.55}
+
+/* HEADER */
+.hdr{height:var(--hh);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:14px;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 1px 0 var(--border),0 2px 20px rgba(0,0,0,.5)}
+.hdr-logo{width:32px;height:32px;background:linear-gradient(135deg,#818cf8,#bf5af2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:0 0 14px rgba(129,140,248,.5)}
+.hdr-title{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.01em;text-shadow:0 0 20px rgba(129,140,248,.6)}
+.hdr-sub{font-size:11px;color:var(--light);margin-left:2px}
+.hdr-gap{flex:1}
+.pill{background:var(--accent-bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:12px;color:var(--muted);font-weight:600}
+.pill.hot{background:var(--q1-bg);border-color:var(--q1-border);color:var(--q1);text-shadow:0 0 8px var(--q1-glow)}
+.notif-btn{width:34px;height:34px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;transition:background .15s,box-shadow .15s}
+.notif-btn:hover{background:var(--accent-bg);box-shadow:0 0 12px rgba(129,140,248,.2)}
+.notif-dot{position:absolute;top:-3px;right:-3px;width:8px;height:8px;background:var(--q1);border-radius:50%;border:2px solid var(--surface);display:none;box-shadow:0 0 6px var(--q1)}
+.add-btn{display:flex;align-items:center;gap:5px;background:var(--accent);color:#fff;border:none;padding:7px 14px;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s,box-shadow .15s;box-shadow:0 0 16px rgba(129,140,248,.4)}
+.add-btn:hover{opacity:.9;box-shadow:0 0 24px rgba(129,140,248,.6)}
+.add-btn:active{transform:scale(.97)}
+
+/* LAYOUT */
+.main{margin-top:var(--hh);height:calc(100vh - var(--hh));display:flex;overflow:hidden;transition:padding-right .3s ease}
+.main.open{padding-right:var(--panel)}
+
+/* GRID */
+.grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;overflow:hidden}
+.quadrant{display:flex;flex-direction:column;border-right:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;min-height:0;background:var(--surface)}
+.quadrant:nth-child(2),.quadrant:nth-child(4){border-right:none}
+.quadrant:nth-child(3),.quadrant:nth-child(4){border-bottom:none}
+
+.qhdr{padding:12px 14px 10px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface)}
+.qhdr-row{display:flex;align-items:center;gap:8px}
+.qdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.q1 .qdot{background:var(--q1);box-shadow:0 0 8px var(--q1)} .q2 .qdot{background:var(--q2);box-shadow:0 0 8px var(--q2)} .q3 .qdot{background:var(--q3);box-shadow:0 0 8px var(--q3)} .q4 .qdot{background:var(--q4);box-shadow:0 0 8px var(--q4)}
+.qname{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.q1 .qname{color:var(--q1);text-shadow:0 0 12px var(--q1-glow)} .q2 .qname{color:var(--q2);text-shadow:0 0 12px var(--q2-glow)} .q3 .qname{color:var(--q3);text-shadow:0 0 12px var(--q3-glow)} .q4 .qname{color:var(--q4);text-shadow:0 0 12px var(--q4-glow)}
+.qsub{font-size:11px;color:var(--light);margin-left:18px;margin-top:2px}
+.qcount{margin-left:auto;font-size:11px;font-weight:700;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:1px 8px}
+
+.card-list{flex:1;overflow-y:auto;padding:7px;display:flex;flex-direction:column;gap:3px}
+.card-list::-webkit-scrollbar{width:3px}
+.card-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* CARD */
+.card{background:rgba(15,15,28,.8);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;cursor:pointer;transition:box-shadow .15s,border-color .15s,background .15s;display:flex;gap:9px;align-items:flex-start;animation:fadeUp .2s ease}
+.card:hover{box-shadow:var(--sh-md);border-color:#2a2a45;background:rgba(20,20,38,.9)}
+.card.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(129,140,248,.2),0 0 16px rgba(129,140,248,.1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.chk{width:17px;height:17px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:1px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
+.q1 .chk{border-color:var(--q1)} .q2 .chk{border-color:var(--q2)} .q3 .chk{border-color:var(--q3)} .q4 .chk{border-color:var(--q4)}
+.chk:hover{transform:scale(1.1)}
+.chk.done{color:#fff}
+.q1 .chk.done{background:var(--q1);border-color:var(--q1)} .q2 .chk.done{background:var(--q2);border-color:var(--q2)} .q3 .chk.done{background:var(--q3);border-color:var(--q3)} .q4 .chk.done{background:var(--q4);border-color:var(--q4)}
+
+.cbody{flex:1;min-width:0}
+.ctitle{font-size:13.5px;font-weight:500;color:var(--text);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ctitle.done{text-decoration:line-through;color:var(--light)}
+.cmeta{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.tag{font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:4px;background:var(--bg);border:1px solid var(--border);color:var(--muted);white-space:nowrap}
+.tag.kr{background:var(--q2-bg);border-color:var(--q2-border);color:var(--q2)}
+.tag.dl{background:var(--q3-bg);border-color:var(--q3-border);color:var(--q3)}
+.tag.ov{background:var(--q1-bg);border-color:var(--q1-border);color:var(--q1)}
+.tag.nt{background:var(--accent-bg);border-color:#2a2a50;color:var(--accent)}
+.ccomm{width:15px;height:15px;border-radius:50%;background:var(--accent);color:#fff;font-size:8.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center}
+
+.empty{display:flex;align-items:center;justify-content:center;height:60px;color:var(--light);font-size:12px;gap:6px;opacity:.7}
+
+/* PANEL */
+.panel{position:fixed;top:var(--hh);right:0;width:var(--panel);height:calc(100vh - var(--hh));background:#0c0c1a;border-left:1px solid var(--border);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:50}
+.panel.open{transform:translateX(0);box-shadow:-8px 0 40px rgba(0,0,0,.7)}
+.phdr{padding:14px 18px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.phdr-top{display:flex;align-items:flex-start;gap:10px}
+.pbadge{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:100px;flex-shrink:0;margin-top:3px}
+.b1{background:var(--q1-bg);color:var(--q1);border:1px solid var(--q1-border);text-shadow:0 0 8px var(--q1-glow)} .b2{background:var(--q2-bg);color:var(--q2);border:1px solid var(--q2-border);text-shadow:0 0 8px var(--q2-glow)} .b3{background:var(--q3-bg);color:var(--q3);border:1px solid var(--q3-border);text-shadow:0 0 8px var(--q3-glow)} .b4{background:var(--q4-bg);color:var(--q4);border:1px solid var(--q4-border);text-shadow:0 0 8px var(--q4-glow)}
+.ptitle{font-size:15.5px;font-weight:700;color:#fff;line-height:1.4;flex:1;outline:none}
+.ptitle:focus{border-bottom:2px solid var(--accent)}
+.pclose{width:27px;height:27px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);transition:background .15s;flex-shrink:0}
+.pclose:hover{background:var(--bg)}
+.pmeta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.qsel{font-size:11.5px;font-weight:600;padding:3px 8px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);color:var(--muted);cursor:pointer;outline:none;margin-top:6px}
+.qsel:hover{border-color:var(--accent);color:var(--accent)}
+
+.ptabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;padding:0 18px}
+.ptab{padding:9px 11px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;display:flex;align-items:center;gap:4px}
+.ptab.on{color:#fff;border-bottom-color:var(--accent);text-shadow:0 0 10px rgba(129,140,248,.4)}
+.ptab:hover:not(.on){color:var(--text)}
+.tbadge{background:var(--accent);color:#fff;font-size:8.5px;font-weight:700;min-width:14px;height:14px;border-radius:100px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+
+.pcontent{flex:1;overflow-y:auto;min-height:0}
+.pcontent::-webkit-scrollbar{width:3px}
+.pcontent::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.pane{display:none;padding:16px 18px}
+.pane.on{display:block}
+.slabel{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:9px}
+.desc{font-size:13.5px;color:var(--text);line-height:1.7;white-space:pre-wrap}
+.psec{margin-bottom:18px}
+
+.ntxt{width:100%;min-height:110px;border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-size:14px;font-family:inherit;color:var(--text);resize:vertical;outline:none;transition:border-color .15s;background:var(--bg);line-height:1.6}
+.ntxt:focus{border-color:var(--accent);background:#0a0a16}
+.ntxt::placeholder{color:var(--light)}
+.nsave{margin-top:7px;padding:6px 13px;background:var(--accent);color:#fff;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:600;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s}
+.nsave.vis{opacity:1;pointer-events:auto}
+.nsave:hover{opacity:.85}
+
+/* COMMENTS */
+.clist{display:flex;flex-direction:column;gap:11px}
+.cmnt{display:flex;gap:9px}
+.cav{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.cav-g{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.cav-j{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.cbbl{flex:1;border:1px solid var(--border);border-radius:0 9px 9px 9px;padding:9px 12px;background:var(--bg)}
+.cbbl-j{background:#001a12;border-color:#004d30}
+.cbbl-q{background:#0d0020;border-color:#2d0060}
+.cauthor{font-size:10.5px;font-weight:700;color:var(--muted);margin-bottom:3px}
+.ctext{font-size:12.5px;color:var(--text);line-height:1.5}
+.ctime{font-size:10px;color:var(--light);margin-top:4px}
+.cnone{font-size:12.5px;color:var(--light);text-align:center;padding:20px 0}
+
+.cinput{margin-top:14px;border-top:1px solid var(--border);padding-top:13px}
+.ctabs{display:flex;gap:7px;margin-bottom:9px}
+.ctbtn{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all .15s}
+.ctbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.ctarea{width:100%;border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 11px;font-size:13.5px;font-family:inherit;color:var(--text);resize:none;outline:none;height:72px;transition:border-color .15s;background:var(--bg);line-height:1.5}
+.ctarea:focus{border-color:var(--accent);background:#0a0a16}
+.ctarea::placeholder{color:var(--light)}
+.csend-row{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
+.chint{font-size:10.5px;color:var(--light)}
+.sbtn{padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s}
+.sbtn:hover{opacity:.85}
+.sbtn:active{transform:scale(.97)}
+
+/* DONE SECTION */
+.done-section{padding:0 7px 7px}
+.done-toggle{display:flex;align-items:center;gap:7px;padding:7px 7px;cursor:pointer;color:var(--muted);font-size:11.5px;font-weight:600;user-select:none}
+.done-toggle:hover{color:var(--text)}
+.done-list{display:none;flex-direction:column;gap:3px}
+.done-list.open{display:flex}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,8,.7);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#0e0e1e;border:1px solid var(--border);border-radius:var(--r);width:490px;max-width:calc(100vw - 32px);box-shadow:var(--sh-lg),0 0 40px rgba(129,140,248,.1);overflow:hidden}
+.mhdr{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mtitle{font-size:15px;font-weight:700;color:var(--text)}
+.mclose{width:27px;height:27px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;font-size:14px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:background .15s}
+.mclose:hover{background:var(--bg)}
+.steps{display:flex;gap:5px;padding:14px 22px 0}
+.sdot{height:3px;flex:1;border-radius:2px;background:var(--border);transition:background .3s}
+.sdot.on{background:var(--accent)}
+.sdot.ok{background:#22c55e}
+.mbody{padding:18px 22px}
+.fgrp{margin-bottom:14px}
+.flbl{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.finput,.ftxt,.fsel{width:100%;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 11px;font-size:14px;font-family:inherit;color:var(--text);outline:none;background:var(--bg);transition:border-color .15s,background .15s}
+.finput:focus,.ftxt:focus,.fsel:focus{border-color:var(--accent);background:#0a0a16;box-shadow:0 0 0 3px rgba(129,140,248,.1)}
+.ftxt{height:72px;resize:none}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+
+.ynq{font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ynh{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.55}
+.ynb{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ynbtn{padding:15px;border-radius:var(--r);border:2px solid var(--border);background:var(--surface);cursor:pointer;text-align:center;transition:all .15s}
+.ynbtn:hover{border-color:var(--accent);background:var(--accent-bg);box-shadow:0 0 16px rgba(129,140,248,.15)}
+.ynbtn.sy{border-color:#22c55e;background:#001a0a;box-shadow:0 0 16px rgba(34,197,94,.15)}
+.ynbtn.sn{border-color:var(--q4);background:var(--q4-bg)}
+.ynem{font-size:22px;display:block;margin-bottom:5px}
+.ynlbl{font-size:13.5px;font-weight:600}
+.yndesc{font-size:10.5px;color:var(--muted);margin-top:3px}
+
+.result-wrap{text-align:center;padding:16px 0}
+.rbadge{display:inline-flex;align-items:center;gap:7px;padding:7px 18px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:10px}
+.rdesc{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:330px;margin:0 auto}
+
+.mftr{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end}
+.btn-sec{padding:7px 14px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.btn-sec:hover{background:var(--accent-bg);color:var(--text)}
+.btn-pri{padding:7px 16px;border:none;border-radius:var(--r-sm);background:var(--accent);font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:opacity .15s,box-shadow .15s;box-shadow:0 0 14px rgba(129,140,248,.3)}
+.btn-pri:hover{opacity:.9;box-shadow:0 0 20px rgba(129,140,248,.5)}
+.btn-pri:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:#1a1a2e;color:var(--text);border:1px solid var(--accent);padding:9px 20px;border-radius:100px;font-size:13px;font-weight:600;z-index:500;transition:transform .28s cubic-bezier(.4,0,.2,1);pointer-events:none;white-space:nowrap;box-shadow:0 0 20px rgba(129,140,248,.3)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* LOCK SCREEN */
+.lock{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.lock-box{display:flex;flex-direction:column;align-items:center;gap:20px;width:320px}
+.lock-logo{width:52px;height:52px;background:linear-gradient(135deg,#818cf8,#bf5af2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 30px rgba(129,140,248,.5),0 0 60px rgba(191,90,242,.2)}
+.lock-title{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.02em;text-shadow:0 0 24px rgba(129,140,248,.5)}
+.lock-sub{font-size:13px;color:var(--muted);margin-top:-14px}
+.lock-input{width:100%;background:#0f0f1c;border:1.5px solid var(--border);border-radius:var(--r);padding:13px 16px;font-size:16px;font-family:inherit;color:#fff;outline:none;text-align:center;letter-spacing:.1em;transition:border-color .2s,box-shadow .2s}
+.lock-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(129,140,248,.15),0 0 20px rgba(129,140,248,.1)}
+.lock-input::placeholder{color:var(--light);letter-spacing:normal}
+.lock-btn{width:100%;background:var(--accent);border:none;border-radius:var(--r);padding:13px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;transition:opacity .15s,box-shadow .2s;box-shadow:0 0 20px rgba(129,140,248,.35)}
+.lock-btn:hover{opacity:.9;box-shadow:0 0 30px rgba(129,140,248,.55)}
+.lock-err{font-size:12.5px;color:var(--q1);text-shadow:0 0 8px var(--q1-glow);display:none;font-weight:600}
+.lock-err.show{display:block}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.shake{animation:shake .35s ease}
+</style>
+</head>
+<body>
+
+<div class="lock" id="lock">
+  <div class="lock-box">
+    <div class="lock-logo">⚡</div>
+    <div class="lock-title">Command Center</div>
+    <div class="lock-sub">Enter your password to continue</div>
+    <input class="lock-input" id="lock-input" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')unlock()">
+    <button class="lock-btn" onclick="unlock()">Unlock</button>
+    <div class="lock-err" id="lock-err">Incorrect password</div>
+  </div>
+</div>
+
+<header class="hdr">
+  <div class="hdr-logo">⚡</div>
+  <div>
+    <div class="hdr-title">Command Center</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-left:10px">
+    <span class="pill hot" id="stat-q1">0 urgent</span>
+    <span class="pill" id="stat-open">0 open</span>
+    <span class="pill" id="stat-done">0 done</span>
+  </div>
+  <div class="hdr-gap"></div>
+  <button class="notif-btn" id="notif-btn" onclick="openUnread()" title="Unread replies from Junior">
+    💬<span class="notif-dot" id="notif-dot"></span>
+  </button>
+  <button class="add-btn" onclick="openModal()">＋ Add Item</button>
+</header>
+
+<div class="main" id="main">
+  <div class="grid">
+    <div class="quadrant q1">
+      <div class="qhdr"><div class="qhdr-row"><div class="qdot"></div><span class="qname">Q1 — Do First</span><span class="qcount" id="cnt-Q1">0</span></div><div class="qsub">Urgent + Important</div></div>
+      <div class="card-list" id="list-Q1"></div>
+    </div>
+    <div class="quadrant q2">
+      <div class="qhdr"><div class="qhdr-row"><div class="qdot"></div><span class="qname">Q2 — Schedule</span><span class="qcount" id="cnt-Q2">0</span></div><div class="qsub">Not Urgent + Important</div></div>
+      <div class="card-list" id="list-Q2"></div>
+    </div>
+    <div class="quadrant q3">
+      <div class="qhdr"><div class="qhdr-row"><div class="qdot"></div><span class="qname">Q3 — Delegate</span><span class="qcount" id="cnt-Q3">0</span></div><div class="qsub">Urgent + Not Important</div></div>
+      <div class="card-list" id="list-Q3"></div>
+    </div>
+    <div class="quadrant q4">
+      <div class="qhdr"><div class="qhdr-row"><div class="qdot"></div><span class="qname">Q4 — Deprioritize</span><span class="qcount" id="cnt-Q4">0</span></div><div class="qsub">Not Urgent + Not Important</div></div>
+      <div class="card-list" id="list-Q4"></div>
+    </div>
+  </div>
+</div>
+
+<aside class="panel" id="panel">
+  <div class="phdr">
+    <div class="phdr-top">
+      <span class="pbadge" id="pbadge"></span>
+      <div style="flex:1">
+        <div class="ptitle" id="ptitle"></div>
+        <div class="pmeta" id="pmeta"></div>
+        <select class="qsel" id="qsel" onchange="moveQ()">
+          <option value="Q1">→ Q1: Do First</option>
+          <option value="Q2">→ Q2: Schedule</option>
+          <option value="Q3">→ Q3: Delegate</option>
+          <option value="Q4">→ Q4: Deprioritize</option>
+        </select>
+      </div>
+      <button class="pclose" onclick="closePanel()">✕</button>
+    </div>
+  </div>
+  <div class="ptabs">
+    <div class="ptab on" id="tab-d" onclick="swTab('d')">Details</div>
+    <div class="ptab" id="tab-n" onclick="swTab('n')">My Notes</div>
+    <div class="ptab" id="tab-c" onclick="swTab('c')">Comments <span class="tbadge" id="cbadge" style="display:none"></span></div>
+  </div>
+  <div class="pcontent">
+    <div class="pane on" id="pane-d">
+      <div class="psec"><div class="slabel">Description</div><div class="desc" id="pdesc"></div></div>
+    </div>
+    <div class="pane" id="pane-n">
+      <div class="psec">
+        <div class="slabel">Your private notes</div>
+        <textarea class="ntxt" id="ntxt" placeholder="Notes for yourself — not visible to anyone else..." oninput="notesDirty()"></textarea>
+        <button class="nsave" id="nsave" onclick="saveNotes()">Save notes</button>
+      </div>
+    </div>
+    <div class="pane" id="pane-c">
+      <div class="clist" id="clist"></div>
+      <div class="cinput">
+        <div class="ctabs">
+          <button class="ctbtn on" id="ct-note" onclick="setCType('note')">📝 Note to self</button>
+          <button class="ctbtn" id="ct-jr" onclick="setCType('jr')">🤖 @ Junior</button>
+        </div>
+        <textarea class="ctarea" id="ctarea" placeholder="Write a note or ask Junior something..."></textarea>
+        <div class="csend-row">
+          <span class="chint" id="chint">Private note</span>
+          <button class="sbtn" onclick="sendComment()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle" id="mtitle">New Action Item</div><button class="mclose" onclick="closeModal()">✕</button></div>
+    <div class="steps" id="steps"><div class="sdot on" id="s0"></div><div class="sdot" id="s1"></div><div class="sdot" id="s2"></div><div class="sdot" id="s3"></div></div>
+    <div class="mbody" id="mbody"></div>
+    <div class="mftr"><button class="btn-sec" id="mback" onclick="wBack()" style="display:none">← Back</button><button class="btn-pri" id="mnext" onclick="wNext()">Next →</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ──────────────────────────────────────────────────────────────────
+
+  const GH_REPO='gerardleconte/Command-Center';
+  const GH_FILE='state.json';
+  const RAW_URL='https://raw.githubusercontent.com/'+GH_REPO+'/main/'+GH_FILE+'?cache='+Date.now();
+const SK='ai-cc';
+const QI = {
+  Q1:{l:'Do First',d:'Urgent + Important',bc:'b1'},
+  Q2:{l:'Schedule',d:'Not Urgent + Important',bc:'b2'},
+  Q3:{l:'Delegate',d:'Urgent + Not Important',bc:'b3'},
+  Q4:{l:'Deprioritize',d:'Not Urgent + Not Important',bc:'b4'}
+};
+
+function seed(){return[
+  {id:'q1-1',q:'Q1',t:'Confirm Epic slide approval from Robert Zorko',desc:'Revised slides submitted to Robert Zorko on March 14 at 7:04am with all feedback integrated. Awaiting his confirmation they are cleared for customer use.\n\nIf no response by Monday noon, follow up directly: robert@epic.com\n\nContext: Slides submitted to Sherlock (SLG #11037138). Extensive comments came back. Revisions done — now waiting on Robert.',kr:'KR 1.2',dl:'Before Tue Mar 17',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q1-2',q:'Q1',t:"Write discovery script for Tuesday's MyChart customer call",desc:'10 questions max covering: current IDV workflow, pain points, Epic integration awareness, procurement process, and success metrics.\n\nThis is also the first live discovery interview for the GTM playbook (currently at score 0.1 with 17 days left). Use it. Take notes.\n\nTime required: ~45 minutes.',kr:'KR 1.3',dl:'Before Tue Mar 17',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q1-3',q:'Q1',t:'Write Taktile POC scope definition',desc:'One paragraph: use case (specific Taktile decision node where IDV applies), pass/fail criteria, 10-day timeline, output format.\n\nKickoff with Tilly Lupini is confirmed for March 18 at 7:30am PDT. Walk in with this written — the call must be a technical kickoff, not exploratory.\n\nTime required: ~30 minutes.',kr:'KR 2.1',dl:'Before Mar 18 7:30am',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q1-4',q:'Q1',t:'Reply to Marita with detailed Clear UX breakdown',desc:'Marita explicitly asked in the HIMSS Recap email thread: "Can you provide more details on Clear\'s UX for the team to be able to action?"\n\nMitch already responded about fixing UX — team is primed to act but needs your field intel.\n\nWhat to include: The 360x Referral TEFCA demo, the Rivian/Apple-level onboarding feel, "consumer-grade" sentiment from health systems on the floor, that this is a CX gap (not a performance gap), and the specific moments in the flow that made the strongest impression.',kr:'',dl:'Today',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q1-5',q:'Q1',t:'Log HIMSS contacts in Salesforce as pipeline opportunities',desc:'Marita was explicit at the recap call. KR 3.3 jumps from 0.35 to 0.7+ the moment this is done. 90-minute desk task, zero external dependencies.\n\nMinimum entries (named contact + next step + expected close date):\n• Docket — Michael Perretta — IAS + Patient Matching — Next: Mar 25 + NDA — Close: Mar 31\n• Verifiable — Angela Mannix — HCP lane — Next: wireframe + NDA — Close: Mar 31\n• Xcures — IAS lane — qualifying call\n• Emperata — access management / Epic adjacency\n• Medallion — HCP verification — call with Jordan Tantleff\n• Hyland (OnBase) — biometric matching\n• Imprivata — Epic MyChart adjacent\n• Microsoft (Sean Wilson) — healthcare partnerships\n• CDW — SI lane — intake form submitted\n• IQVIA backup (TBD Monday)',kr:'KR 3.3',dl:'Today (overdue)',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q1-6',q:'Q1',t:'Re-engage Verado',desc:'One email acknowledging the recent busy stretch (Vive, summit, HIMSS) and requesting a follow-up call.\n\nWas supposed to go out March 13 — it is overdue.\n\nGerard has been following up weekly after Windsor stepped back. Marita suggested dropping IQVIA but not Verado.\n\nTime required: 5 minutes.',kr:'',dl:'Today (overdue)',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q1-7',q:'Q1',t:'Name IQVIA backup for IAS lane and send outreach',desc:'IQVIA has been unresponsive since March 9. Marita said to drop the outreach. IAS lane has no active champion with 17 days left and zero NDAs signed.\n\nFlexpa and Verato are both in the 2026 strategy as IAS/CSP anchors. Flexpa call (Thomas Hamilton) is already on calendar March 19.\n\nOne decision + one email + one Salesforce entry. The lane is alive again.',kr:'KR 3.1',dl:'Mon Mar 16',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q1-8',q:'Q1',t:'Execute MyChart customer call — push for POC agreement',desc:'First real POC conversation since the Epic Showroom listing went live. Sets the trajectory for two KRs.\n\nExplicit ask on the call: "Are you ready to move forward with a proof of concept? I can send a one-page scope doc this week."\n\nImmediately after the call:\n1. Send follow-up email with POC scope, timeline, next steps\n2. Write debrief notes for the GTM playbook — which questions worked, what objections surfaced, what the customer cared about',kr:'KR 1.2 + 1.3',dl:'Tue Mar 17 (scheduled)',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-1',q:'Q2',t:'Send partnership wireframe + NDA proposal to Angela Mannix (Verifiable)',desc:'Email to Angela with:\n1. One-page partnership wireframe — integration path and joint use cases in pharma, digital health, and medical staffing\n2. A prospect list of target accounts\n3. NDA proposed as the formal next step\n\nClear has never successfully established a partnership with Verifiable. This lane is open.\n\nContact: Angela Mannix (Verifiable)',kr:'KR 3.1',dl:'Mon–Tue Mar 16–17',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-2',q:'Q2',t:'Formalize and publish the Alloy Partner Sales Enablement Kit',desc:'Update the kit with one-paragraph use case descriptions for Alloy\'s two new production capabilities — Stable ID and Selfie Pattern (surfaced in the March 13 check-in).\n\nThen publish: share with Windsor, Marita, and the sales team. Drop it in a shared folder the field can access. Message: "This is the Alloy orchestration SKU — use it."\n\nDo this before the March 20 Sales Meeting. KR 2.3 closes at 1.0.',kr:'KR 2.3',dl:'By Mon Mar 16',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-3',q:'Q2',t:'Write Oscilar Q2 activation plan',desc:'Document covering:\n1. Current relationship status\n2. Context on Oscilar\'s delay\n3. Q2 timeline with named milestones\n4. Named stakeholders on both sides\n5. Commercial terms gate — what needs to be true before moving to commercial conversation\n6. Next steps with dates\n\nNo Oscilar input required. All inputs exist today. 2-hour desk task. KR 2.2 closes at 1.0.',kr:'KR 2.2',dl:'By Fri Mar 20',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-4',q:'Q2',t:'Build Kantara CSP certification prerequisite checklist',desc:'Pull from the Kantara applicant portal. Format: item, owner, status, estimated completion date.\n\nKantara is confirmed as the certifying body. Vouched is already a registered applicant. Once the checklist exists and is shared internally, KR 3.2 closes at 1.0.\n\nPair with: Email Christina Caraballo (VP of Informatics, HIMSS) to confirm the list is complete and ask about immediate hospital lead gen options.',kr:'KR 3.2',dl:'By Wed Mar 18',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-5',q:'Q2',t:'Compile GTM playbook first draft',desc:'Three components:\n1. Discovery script (built pre-Tuesday, refined from call notes)\n2. ROI model — one-page calculator: cost of manual IDV per patient vs. Vouched\n3. Objection handling guide — 5–8 objections with scripted responses (Clear\'s UX superiority is objection #1)\n\nShare at March 20 Sales Meeting. Finalize by March 23.\n\nDependency: Tuesday\'s customer call (Q1, item 8).',kr:'KR 1.3',dl:'Wed–Fri Mar 18–20',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-6',q:'Q2',t:'Hyland (OnBase) follow-up email',desc:'Email to Hyland\'s product and partnership team (they offered to connect unprompted at HIMSS) proposing a follow-up call.\n\nContext: Vouched is looking for healthcare partners storing scanned patient IDs at scale for retroactive biometric matching without retaining PHI. OnBase stores scanned IDs across a broad healthcare client base with API capabilities supporting match/no-match queries. The contact confirmed API feasibility on the spot.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-7',q:'Q2',t:'Imprivata follow-up — mobile add-on arrangement',desc:'Email to Imprivata contact proposing a structured conversation about a mobile add-on arrangement.\n\nContext: Imprivata is in the Epic MyChart IDV toolkit but limited to hardware (kiosks, computers). They expressed interest in Vouched as a mobile option for situations where patients/providers prefer mobile over the kiosk. Potential channel into Epic without requiring a direct Showroom click.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-8',q:'Q2',t:'Medallion follow-up — call with Jordan Tantleff',desc:'Email to Jordan Tantleff (Partner Manager, Medallion). Medallion committed to internally reviewing whether their Checkr partnership creates any exclusivity constraint.\n\nContext: Vouched sits at the front of Medallion\'s workflow doing identity proofing before expensive background checks begin. Multiple Vouched prospects independently recommended Medallion. Demonstrated demand already exists.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-9',q:'Q2',t:'Email Peter Senkov re: Taktile (pre-kickoff)',desc:'Email requesting a pre-meeting call before the March 18 Taktile kickoff. Marita emphasized aggressive cadence — every 1–2 weeks going forward.\n\nContext: Vouched is reportedly the only IDV vendor in Taktile. Peter can push leads through the pipeline. This relationship is underleveraged.',kr:'',dl:'Before Mar 18',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-10',q:'Q2',t:'Confirm WorldPay Crossbeam setup + track NDA from Diego',desc:'Email to Diego (WorldPay partnerships) confirming:\n1. Timeline for the NDA he offered to initiate\n2. Next step for Crossbeam account mapping they agreed to begin\n\nContext: Diego offered the NDA unprompted at HIMSS. Immediate account overlap identified. Vouched upstream (IDV), WorldPay downstream (payments), zero product overlap.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-11',q:'Q2',t:'Gather AFCU + Summit CU data from Sharon + testimonials',desc:'Email(s) to Sharon:\n• AFCU: usage numbers for the $25K agreement, fraud catch case study details, testimonial request\n• Summit CU: additional details to fill gaps, testimonial request\n\nInput for the Zest AI credit union deck being built in Gamma. Peter is driving this — don\'t let it sit.\n\nDeck use cases: digital onboarding, account recovery, wire transfers, address changes (atto fraud prevention), MDLs.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-12',q:'Q2',t:"Prospect Epic referral/integration partners — brief Windsor's team",desc:"Two deliverables:\n1. Short list of referral and integration partners providing entry points into Epic (SIs, health system consultants, TEFCA-adjacent orgs)\n2. Windsor's team briefed with the 'how to win healthcare systems' document — before or at the March 20 Sales Meeting\n\nThis is how the sales team generates hospital pipeline without waiting for direct Epic Showroom clicks.",kr:'',dl:'By Mar 20 Sales Mtg',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-13',q:'Q2',t:'Docket call — push for NDA (March 25, 7am PDT)',desc:'Already on calendar with Michael Perretta and Marita.\n\nPre-work: Draft NDA language before the call. Walk in ready to send same day.\n\nExplicit ask: "Can we get an NDA in place this week so we can move into scoped conversations?"\n\nDocket is the most engaged healthcare partner in the pipeline — most realistic shot at a signed NDA before March 31.',kr:'KR 3.1',dl:'Mar 25 (on calendar)',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-14',q:'Q2',t:'Follow up on all NDA proposals',desc:'By this point:\n• Docket NDA: proposed on the March 25 call\n• Verifiable NDA: sent March 16–17\n• IQVIA backup NDA: sent around March 20\n\nAt least 1 must be countersigned by March 31. Docket is the most likely.',kr:'KR 3.1',dl:'Mar 27–31',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-15',q:'Q2',t:'Obtain written POC sign-off from MyChart customer',desc:'Written confirmation — email is sufficient — that the POC is functional and viable.\n\nCloses KR 1.2 at 0.9+.\n\nDependency: Verbal agreement from Tuesday\'s call (Q1, item 8). POC must be underway by March 18.',kr:'KR 1.2',dl:'Mar 28–31',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q2-16',q:'Q2',t:'Document Taktile POC results and share internally',desc:'One-pager: what was tested, the outcome, and what it means for the partnership. Share with Marita and the team.\n\nKickoff: Confirmed March 18, 7:30am PDT with Tilly Lupini.\nExecution window: March 18–28.\nContacts: Tilly Lupini (day-to-day), Tomas Bouska (escalation).',kr:'KR 2.1',dl:'By Mar 31',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q3-1',q:'Q3',t:'Add AE (Ryan or Nick) to Zest AI meeting — email Windsor',desc:'One email to Windsor requesting that Ryan or Nick be added to the March 25 Zest AI Technology Deep Dive (on calendar at 8:30am).\n\nMarita wants an AE present to demonstrate partnership and ensure sales is looped in early if the meeting leads to a selling conversation.',kr:'',dl:'Before Mar 25',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q3-2',q:'Q3',t:'Send Xcures follow-up email + schedule call',desc:'Follow-up email to Xcures contact. They currently use Clear but are open to Vouched as an additional option or for benchmarking.\n\nGoal: schedule a qualifying call — real displacement opportunity or just conversation?\n\nLog in Salesforce when call is confirmed.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q3-3',q:'Q3',t:'Check FedRAMP compliance requirement for Kerasoft',desc:'Yes/no: is FedRAMP authorization required to pursue Kerasoft?\n\nIf yes: flag as blocker, log the dependency.\nIf no: move to active outreach.\n\nKerasoft is a procurement accelerator in healthcare, education, and government — currently working with ID.me. Marita raised this as a gating question.\n\nTime required: ~30 minutes research.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q3-4',q:'Q3',t:'Contact Qin contacts — biometric face matching + Agentic topics',desc:'Emails sent to two Qin contacts covering biometric face matching and Agentic topics. Log in Salesforce or relevant tracker once sent.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q3-5',q:'Q3',t:'Confirm Microsoft (Sean Wilson) outreach is sent',desc:'Confirm the outreach email to Sean Wilson (Microsoft, partner solutions architect, healthcare referral from HIMSS booth) is in the sent folder.\n\nIf not yet sent: send one intro email requesting a brief call to explore the healthcare partnership opportunity.',kr:'',dl:'This week',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()},
+  {id:'q4-1',q:'Q4',t:'Surescripts follow-up (Matt Koehler, VP of Product Innovation)',desc:'Cold reception at HIMSS. They work with Clear and are not eager to consider other providers — consistent with prior Surescripts signals.\n\nOutreach already sent. One passive check-in is acceptable; do not invest further time unless they respond.\n\nIf no response in two weeks, park indefinitely.',kr:'',dl:'',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()}
+];}
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let items=[], selId=null, activeTab='d', ctype='note', wStep=0, wData={};
+
+function now(){return new Date().toISOString();}
+function byId(id){return items.find(i=>i.id===id);}
+function save(){localStorage.setItem(SK,JSON.stringify(items));}
+async function load(){
+  let local=[];
+  try{const s=localStorage.getItem(SK);if(s)local=JSON.parse(s);}catch{}
+  // Show local immediately, then merge remote on top
+  items=local.length?local:seed(); render();
+  try{
+    const res=await fetch('https://raw.githubusercontent.com/'+GH_REPO+'/main/'+GH_FILE+'?t='+Date.now());
+    if(res.ok){
+      const data=await res.json();
+      const remote=(data.items||[]);
+      const lmap={};local.forEach(i=>lmap[i.id]=i);
+      const merged=remote.map(ri=>{
+        const li=lmap[ri.id];
+        if(!li)return ri;
+        return{...ri,done:li.done||ri.done,doneAt:li.done?li.doneAt:(ri.done?ri.doneAt:null),notes:li.notes||ri.notes,comments:(li.comments&&li.comments.length)?li.comments:ri.comments};
+      });
+      // Keep Gerard's locally-added items not in remote
+      const rids=new Set(remote.map(i=>i.id));
+      local.forEach(li=>{if(!rids.has(li.id))merged.push(li);});
+      items=merged; save();
+    }
+  }catch(e){console.warn('Remote fetch failed, using local',e);}
+  render();
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────────────
+function render(){
+  ['Q1','Q2','Q3','Q4'].forEach(q=>{
+    const open=items.filter(i=>i.q===q&&!i.done);
+    document.getElementById('cnt-'+q).textContent=open.length;
+    const el=document.getElementById('list-'+q);
+    el.innerHTML='';
+    if(!open.length){el.innerHTML='<div class="empty">✓ All clear</div>';}
+    else open.forEach(i=>el.appendChild(mkCard(i)));
+  });
+  const all=items.filter(i=>!i.done), done=items.filter(i=>i.done);
+  document.getElementById('stat-q1').textContent=items.filter(i=>i.q==='Q1'&&!i.done).length+' urgent';
+  document.getElementById('stat-open').textContent=all.length+' open';
+  document.getElementById('stat-done').textContent=done.length+' done';
+  const unread=items.reduce((a,i)=>a+i.comments.filter(c=>c.author==='Junior'&&!c.read).length,0);
+  document.getElementById('notif-dot').style.display=unread?'block':'none';
+  if(selId)renderPanel(selId);
+}
+
+function mkCard(item){
+  const d=document.createElement('div');
+  d.className='card'+(item.id===selId?' active':'');
+  d.onclick=e=>{if(!e.target.classList.contains('chk'))openPanel(item.id);};
+  const unread=item.comments.filter(c=>c.author==='Junior'&&!c.read).length;
+  const q=item.q.toLowerCase();
+  const dlCls=item.dl&&item.dl.toLowerCase().includes('overdue')?'ov':'dl';
+  d.innerHTML=`
+    <div class="chk ${q} ${item.done?'done':''}" onclick="toggleDone('${item.id}',event)">${item.done?'✓':''}</div>
+    <div class="cbody">
+      <div class="ctitle ${item.done?'done':''}">${esc(item.t)}</div>
+      <div class="cmeta">
+        ${item.kr?`<span class="tag kr">${esc(item.kr)}</span>`:''}
+        ${item.dl?`<span class="tag ${dlCls}">📅 ${esc(item.dl)}</span>`:''}
+        ${item.notes?'<span class="tag nt">📝 Notes</span>':''}
+      </div>
+    </div>
+    ${unread?`<div class="ccomm">${unread}</div>`:''}`;
+  return d;
+}
+
+// ─── PANEL ─────────────────────────────────────────────────────────────────
+function openPanel(id){
+  selId=id;
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('main').classList.add('open');
+  const item=byId(id);
+  item.comments.forEach(c=>{if(c.author==='Junior')c.read=true;});
+  save();
+  renderPanel(id);
+  render();
+}
+
+function closePanel(){
+  selId=null;
+  document.getElementById('panel').classList.remove('open');
+  document.getElementById('main').classList.remove('open');
+  render();
+}
+
+function renderPanel(id){
+  const item=byId(id);if(!item)return;
+  const qi=QI[item.q];
+  document.getElementById('pbadge').textContent=item.q+' — '+qi.l;
+  document.getElementById('pbadge').className='pbadge '+qi.bc;
+  document.getElementById('ptitle').textContent=item.t;
+  document.getElementById('qsel').value=item.q;
+  const m=document.getElementById('pmeta');
+  m.innerHTML=(item.kr?`<span class="tag kr">${esc(item.kr)}</span>`:'')+
+    (item.dl?`<span class="tag ${item.dl.toLowerCase().includes('overdue')?'ov':'dl'}">📅 ${esc(item.dl)}</span>`:'');
+  document.getElementById('pdesc').textContent=item.desc||'No description.';
+  document.getElementById('ntxt').value=item.notes||'';
+  document.getElementById('nsave').classList.remove('vis');
+  renderComments(item);
+  const uc=item.comments.length;
+  const cb=document.getElementById('cbadge');
+  cb.textContent=uc; cb.style.display=uc?'flex':'none';
+}
+
+function renderComments(item){
+  const el=document.getElementById('clist');
+  if(!item.comments.length){el.innerHTML='<div class="cnone">No comments yet. Leave a note or ping Junior.</div>';return;}
+  el.innerHTML='';
+  item.comments.forEach(c=>{
+    const isJr=c.author==='Junior', isQ=c.toJr;
+    const d=document.createElement('div');
+    d.className='cmnt';
+    d.innerHTML=`<div class="cav ${isJr?'cav-j':'cav-g'}">${isJr?'🤖':'G'}</div>
+      <div class="cbbl ${isJr?'cbbl-j':isQ?'cbbl-q':''}">
+        <div class="cauthor">${isJr?'Junior':'Gerard'}${isQ?' → Junior':''}</div>
+        <div class="ctext">${esc(c.text)}</div>
+        <div class="ctime">${fmtTime(c.ts)}</div>
+      </div>`;
+    el.appendChild(d);
+  });
+  el.scrollTop=el.scrollHeight;
+}
+
+function swTab(t){
+  activeTab=t;
+  ['d','n','c'].forEach(x=>{
+    document.getElementById('tab-'+x).classList.toggle('on',x===t);
+    document.getElementById('pane-'+x).classList.toggle('on',x===t);
+  });
+}
+
+function moveQ(){
+  const item=byId(selId);if(!item)return;
+  const nq=document.getElementById('qsel').value;
+  if(nq===item.q)return;
+  item.q=nq; item.updated=now(); save();
+  renderPanel(selId); render();
+  toast('Moved to '+QI[nq].l);
+}
+
+function notesDirty(){document.getElementById('nsave').classList.add('vis');}
+function saveNotes(){
+  const item=byId(selId);if(!item)return;
+  item.notes=document.getElementById('ntxt').value;
+  item.updated=now(); save();
+  document.getElementById('nsave').classList.remove('vis');
+  render(); toast('Notes saved');
+}
+
+function setCType(t){
+  ctype=t;
+  document.getElementById('ct-note').classList.toggle('on',t==='note');
+  document.getElementById('ct-jr').classList.toggle('on',t==='jr');
+  document.getElementById('chint').textContent=t==='jr'?'🤖 Junior will see this and respond':'Private note';
+  document.getElementById('ctarea').placeholder=t==='jr'?'Ask Junior something about this item...':'Write a note for yourself...';
+}
+
+function sendComment(){
+  const item=byId(selId);if(!item)return;
+  const txt=document.getElementById('ctarea').value.trim();if(!txt)return;
+  item.comments.push({id:'c'+Date.now(),author:'Gerard',toJr:ctype==='jr',text:txt,ts:now(),read:true});
+  item.updated=now(); save();
+  document.getElementById('ctarea').value='';
+  renderComments(item);
+  const cb=document.getElementById('cbadge');
+  cb.textContent=item.comments.length; cb.style.display='flex';
+  toast(ctype==='jr'?'🤖 Junior will respond shortly':'Note added');
+}
+
+function toggleDone(id,e){
+  e.stopPropagation();
+  const item=byId(id);
+  item.done=!item.done; item.doneAt=item.done?now():null; item.updated=now(); save();
+  if(item.done){toast('✓ Done!');if(selId===id)closePanel();}
+  render();
+}
+
+function openUnread(){
+  const item=items.find(i=>i.comments.some(c=>c.author==='Junior'&&!c.read));
+  if(item){openPanel(item.id);swTab('c');}
+}
+
+// ─── WIZARD ────────────────────────────────────────────────────────────────
+function openModal(){wStep=0;wData={};document.getElementById('overlay').classList.add('open');wRender();}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+
+function wRender(){
+  const body=document.getElementById('mbody');
+  const back=document.getElementById('mback');
+  const next=document.getElementById('mnext');
+  [0,1,2,3].forEach(i=>{
+    const d=document.getElementById('s'+i);
+    d.className='sdot'+(i<wStep?' ok':i===wStep?' on':'');
+  });
+  back.style.display=wStep>0?'inline-block':'none';
+  next.disabled=false;
+
+  if(wStep===0){
+    document.getElementById('mtitle').textContent='New Action Item';
+    next.textContent='Next →';
+    body.innerHTML=`
+      <div class="fgrp"><label class="flbl">Title *</label><input class="finput" id="wi-t" placeholder="What needs to be done?" value="${esc(wData.t||'')}" oninput="wData.t=this.value"></div>
+      <div class="fgrp"><label class="flbl">Description</label><textarea class="ftxt" id="wi-d" placeholder="Context, contacts, what done looks like..." oninput="wData.d=this.value">${esc(wData.d||'')}</textarea></div>
+      <div class="frow">
+        <div class="fgrp"><label class="flbl">KR Reference</label><input class="finput" id="wi-kr" placeholder="e.g. KR 1.2" value="${esc(wData.kr||'')}" oninput="wData.kr=this.value"></div>
+        <div class="fgrp"><label class="flbl">Deadline</label><input class="finput" id="wi-dl" placeholder="e.g. By Fri Mar 20" value="${esc(wData.dl||'')}" oninput="wData.dl=this.value"></div>
+      </div>`;
+    setTimeout(()=>document.getElementById('wi-t')?.focus(),50);
+
+  }else if(wStep===1){
+    document.getElementById('mtitle').textContent='Is it urgent?';
+    body.innerHTML=`
+      <p class="ynq">Does this need to happen soon — is there real time pressure?</p>
+      <p class="ynh">Urgent means there's a near-term deadline with real consequences. A Tuesday meeting is urgent. A nice-to-have follow-up is not.</p>
+      <div class="ynb">
+        <div class="ynbtn ${wData.u===true?'sy':''}" onclick="wData.u=true;wRender()"><span class="ynem">🔥</span><div class="ynlbl">Yes, urgent</div><div class="yndesc">Near-term deadline or time pressure</div></div>
+        <div class="ynbtn ${wData.u===false?'sn':''}" onclick="wData.u=false;wRender()"><span class="ynem">📅</span><div class="ynlbl">Not urgent</div><div class="yndesc">Can be scheduled when time allows</div></div>
+      </div>`;
+
+  }else if(wStep===2){
+    document.getElementById('mtitle').textContent='Is it important?';
+    body.innerHTML=`
+      <p class="ynq">Does this move a meaningful needle — real strategic or KR impact?</p>
+      <p class="ynh">Important means significant consequences if not done, or meaningful progress toward a goal. Admin tasks are usually not important. KR-closing work is.</p>
+      <div class="ynb">
+        <div class="ynbtn ${wData.i===true?'sy':''}" onclick="wData.i=true;wRender()"><span class="ynem">🎯</span><div class="ynlbl">Yes, important</div><div class="yndesc">Strategic or KR impact</div></div>
+        <div class="ynbtn ${wData.i===false?'sn':''}" onclick="wData.i=false;wRender()"><span class="ynem">🔧</span><div class="ynlbl">Lower stakes</div><div class="yndesc">Useful but not strategically critical</div></div>
+      </div>`;
+
+  }else if(wStep===3){
+    const q=wData.u&&wData.i?'Q1':!wData.u&&wData.i?'Q2':wData.u&&!wData.i?'Q3':'Q4';
+    wData.q=q;
+    const qi=QI[q];
+    const cols={Q1:['#fef2f2','#ef4444','#fecaca'],Q2:['#eff6ff','#3b82f6','#bfdbfe'],Q3:['#fffbeb','#f59e0b','#fde68a'],Q4:['#f8fafc','#94a3b8','#e2e8f0']};
+    const [bg,fg,br]=cols[q];
+    document.getElementById('mtitle').textContent='Quadrant assigned';
+    next.textContent='Add to board ✓';
+    body.innerHTML=`
+      <div class="result-wrap">
+        <div class="rbadge" style="background:${bg};color:${fg};border:1.5px solid ${br}"><strong style="font-size:15px">${q}</strong> ${qi.l}</div>
+        <h3 style="font-size:14px;font-weight:600;margin-bottom:10px;color:var(--text)">${esc(wData.t)}</h3>
+        <p class="rdesc">This item is <strong>${wData.u?'urgent':'not urgent'}</strong> and <strong>${wData.i?'important':'lower-stakes'}</strong>. Assigned to <strong>${q}: ${qi.l}</strong> — ${qi.d.toLowerCase()}.</p>
+        ${wData.dl?`<p style="margin-top:12px;font-size:12px;color:var(--muted)">📅 ${esc(wData.dl)}</p>`:''}
+      </div>`;
+  }
+}
+
+function wNext(){
+  if(wStep===0){if(!(wData.t||'').trim()){toast('Please enter a title');document.getElementById('wi-t')?.focus();return;}wStep=1;wRender();}
+  else if(wStep===1){if(wData.u===undefined||wData.u===null){toast('Select an option');return;}wStep=2;wRender();}
+  else if(wStep===2){if(wData.i===undefined||wData.i===null){toast('Select an option');return;}wStep=3;wRender();}
+  else if(wStep===3){
+    const item={id:'i'+Date.now(),q:wData.q,t:wData.t.trim(),desc:wData.d||'',kr:wData.kr||'',dl:wData.dl||'',done:false,doneAt:null,notes:'',comments:[],created:now(),updated:now()};
+    items.unshift(item); save(); render(); closeModal();
+    toast('✓ Added to '+wData.q);
+    setTimeout(()=>openPanel(item.id),120);
+  }
+}
+function wBack(){if(wStep>0){wStep--;wRender();}}
+
+// ─── JUNIOR API (canvas eval access) ───────────────────────────────────────
+window.juniorReply=function(itemId,text){
+  const item=byId(itemId);if(!item)return 'item not found';
+  item.comments.push({id:'c'+Date.now(),author:'Junior',toJr:false,text,ts:now(),read:false});
+  item.updated=now(); save(); render();
+  if(selId===itemId)renderComments(item);
+  return 'ok';
+};
+window.getComments=function(){
+  return JSON.stringify(items.filter(i=>i.comments.some(c=>c.author==='Gerard'&&c.toJr))
+    .map(i=>({id:i.id,title:i.t,comments:i.comments.filter(c=>c.author==='Gerard'&&c.toJr)})));
+};
+window.exportItems=function(){return JSON.stringify(items,null,2);};
+window.markDone=function(id){const i=byId(id);if(!i)return 'not found';i.done=true;i.doneAt=now();i.updated=now();save();render();return 'ok';};
+
+// ─── UTILS ─────────────────────────────────────────────────────────────────
+function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtTime(iso){try{const d=new Date(iso);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' at '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}catch{return '';}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){if(document.getElementById('overlay').classList.contains('open'))closeModal();else closePanel();}
+  if((e.metaKey||e.ctrlKey)&&e.key==='n'){e.preventDefault();openModal();}
+});
+
+// ─── AUTH ──────────────────────────────────────────────────────────────────
+const _H='81c6f162477b4c81aa0ecef98b3674184323acb322d7e4bd5a910bd1ff1eb7a0';
+async function _chk(p){const b=new TextEncoder().encode(p);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function unlock(){
+  const p=document.getElementById('lock-input').value;
+  const h=await _chk(p);
+  if(h===_H){
+    sessionStorage.setItem('cc-auth','1');
+    document.getElementById('lock').style.display='none';
+  } else {
+    const box=document.getElementById('lock-input');
+    const err=document.getElementById('lock-err');
+    err.classList.add('show');
+    box.classList.add('shake');
+    box.value='';
+    setTimeout(()=>box.classList.remove('shake'),400);
+  }
+}
+(async()=>{
+  if(sessionStorage.getItem('cc-auth')==='1'){
+    document.getElementById('lock').style.display='none';
+  } else {
+    setTimeout(()=>document.getElementById('lock-input')?.focus(),100);
+  }
+})();
+
+load();
+</script>
+</body>
+</html>

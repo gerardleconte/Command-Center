@@ -1,6 +1,6 @@
 {
-  "version": "ai-202603172219",
-  "lastUpdated": "2026-03-17T22:19:51.608Z",
+  "version": "ai-202603172313",
+  "lastUpdated": "2026-03-17T23:13:12.804Z",
   "items": [
     {
       "id": "q1-1",
@@ -512,6 +512,18 @@
       "t": "Request Salesforce permissions",
       "desc": "Request appropriate Salesforce permissions to support partnerships tracking, pipeline visibility, and partner opportunity management. Needed to log partner-sourced deals, track IQVIA/Taktile/Verifiable pipeline, and fulfill OKR reporting.",
       "kr": "",
+      "dl": "Q1",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": []
+    },
+    {
+      "id": "q1-44",
+      "q": "Q1",
+      "t": "Follow up with Dana at Seqster — recap today's call",
+      "desc": "Send a follow-up email to Dana Hosseini (dana@seqster.com) recapping the March 17 call. Reference the Kantara Phase 1 timeline (end of March) as the key blocker and confirm next steps for the Vouched x Seqster partnership (patient matching / TEFCA IAS lane).",
+      "kr": "KR 3.1",
       "dl": "Q1",
       "done": false,
       "doneAt": null,

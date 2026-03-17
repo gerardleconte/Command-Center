@@ -1,6 +1,6 @@
 {
-  "version": "ai-202603172117",
-  "lastUpdated": "2026-03-17T21:17:00.146Z",
+  "version": "ai-202603172219",
+  "lastUpdated": "2026-03-17T22:19:51.608Z",
   "items": [
     {
       "id": "q1-1",
@@ -501,6 +501,18 @@
       "desc": "At this week's Taktile kickoff (March 18), raise Money 2020 as a joint presence opportunity.\n\nFormat: offsite or small-scale joint event (not necessarily a shared booth). Financial services startups like Taktile are easier to incentivize toward co-events than large healthcare players.\n\nAfter raising with Taktile, confirm timeline feasibility with Ladd and agree on next steps.\n\nRef: Partner Marketing Operationalization Plan, Phase 4",
       "kr": "KR 2.x",
       "dl": "Raise at Mar 18 kickoff; confirm by Mar 23",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": []
+    },
+    {
+      "id": "q1-43",
+      "q": "Q1",
+      "t": "Request Salesforce permissions",
+      "desc": "Request appropriate Salesforce permissions to support partnerships tracking, pipeline visibility, and partner opportunity management. Needed to log partner-sourced deals, track IQVIA/Taktile/Verifiable pipeline, and fulfill OKR reporting.",
+      "kr": "",
+      "dl": "Q1",
       "done": false,
       "doneAt": null,
       "notes": "",

@@ -1,6 +1,6 @@
 {
-  "version": "ai-202603181446",
-  "lastUpdated": "2026-03-20T15:40:15.092259Z",
+  "version": "ai-202603240447",
+  "lastUpdated": "2026-03-24T04:49:22.739031+00:00",
   "items": [
     {
       "id": "q1-45",
@@ -613,6 +613,34 @@
       "comments": [],
       "created": "2026-03-20T15:40:15.092259Z",
       "updated": "2026-03-20T15:40:15.092259Z"
+    },
+    {
+      "id": "q1-48",
+      "q": "Q1",
+      "t": "Wireframe KYB resale structure \u2192 send to Tim (Alloy)",
+      "desc": "Wireframe how Vouched can resell an Alloy deployment while retaining IDV commitment rights with the end customer. Include how Vouched can resell Alloy and how to incentivize Alloy to make a commitment. Send to Tim Runfola for internal review. This is the pivotal deliverable from the March 13 monthly check-in \u2014 Tim's internal follow-through is gated on this.",
+      "kr": "KR 2.1",
+      "dl": "ASAP \u2014 gate item for Alloy commercial discussion",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-03-24T04:49:22.739031+00:00",
+      "updated": "2026-03-24T04:49:22.739031+00:00"
+    },
+    {
+      "id": "q1-49",
+      "q": "Q1",
+      "t": "Send Stable ID + Selfie Pattern docs to Tim (Alloy)",
+      "desc": "Send Tim Runfola documentation on how the Stable ID and Selfie Pattern signals work and what they output. Also send the list of clients who have raised this need: Majority Production, Golden 1 Credit Union, NinjaTrader, Shopify Production, Dwolla, Municipal Credit Union, Mountain America Credit Union. Tim's CS team needs this to tag clients to the integration ticket and prioritize accordingly.",
+      "kr": "",
+      "dl": "ASAP \u2014 gate item for Alloy integration prioritization",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-03-24T04:49:22.739031+00:00",
+      "updated": "2026-03-24T04:49:22.739031+00:00"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "version": "ai-202603240447",
-  "lastUpdated": "2026-03-24T04:49:22.739031+00:00",
+  "version": "ai-202603310643",
+  "lastUpdated": "2026-03-31T06:43:55.679557+00:00",
   "items": [
     {
       "id": "q1-45",
@@ -641,6 +641,62 @@
       "comments": [],
       "created": "2026-03-24T04:49:22.739031+00:00",
       "updated": "2026-03-24T04:49:22.739031+00:00"
+    },
+    {
+      "id": "q1-50",
+      "q": "Q1",
+      "t": "Send updated Mastercard campaign messaging to Mohit Ballaney",
+      "desc": "From Mar 30 reconnect call with Mohit. He needs updated messaging for campaign efforts given leadership changes at Mastercard. Action item captured at 09:20 in transcript.",
+      "kr": "OKR 2",
+      "dl": "ASAP",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-03-31T06:43:55.679557+00:00",
+      "updated": "2026-03-31T06:43:55.679557+00:00"
+    },
+    {
+      "id": "q1-51",
+      "q": "Q1",
+      "t": "Send referral agreement template + playbook to Mohit (Mastercard)",
+      "desc": "From Mar 30 reconnect call. Provide referral agreement template and playbook materials to Mohit Ballaney within next few days to progress revenue share on inbound Epic leads. Action item at 20:40 in transcript.",
+      "kr": "OKR 2",
+      "dl": "By Thu Apr 2",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-03-31T06:43:55.679557+00:00",
+      "updated": "2026-03-31T06:43:55.679557+00:00"
+    },
+    {
+      "id": "q2-25",
+      "q": "Q2",
+      "t": "Schedule Mohit (Mastercard) follow-up meeting",
+      "desc": "From Mar 30 reconnect call. Schedule follow-up to review next steps, Mastercard partnership progress, and intro to new boss Jacques. Also confirm Tim Joseph + Lucille Booker status. Action item at 20:40 in transcript.",
+      "kr": "OKR 2",
+      "dl": "",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-03-31T06:43:55.679557+00:00",
+      "updated": "2026-03-31T06:43:55.679557+00:00"
+    },
+    {
+      "id": "q2-26",
+      "q": "Q2",
+      "t": "Coordinate internal comms \u2014 Mastercard new GM hire + identity team changes",
+      "desc": "From Mar 30 call. New GM hire at Mastercard; key contacts Tim Joseph and Lucille Booker need outreach. John Whitlock (cybersecurity) and new boss Jacques are also relevant for realignment. Action item at 05:30 in transcript.",
+      "kr": "OKR 2",
+      "dl": "",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-03-31T06:43:55.679557+00:00",
+      "updated": "2026-03-31T06:43:55.679557+00:00"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "version": "ai-202603310643",
-  "lastUpdated": "2026-03-31T06:43:55.679557+00:00",
+  "version": "ai-202604011506",
+  "lastUpdated": "2026-04-01T15:06:30.521585+00:00",
   "items": [
     {
       "id": "q1-45",
@@ -527,10 +527,11 @@
       "desc": "Request appropriate Salesforce permissions to support partnerships tracking, pipeline visibility, and partner opportunity management. Needed to log partner-sourced deals, track IQVIA/Taktile/Verifiable pipeline, and fulfill OKR reporting.",
       "kr": "",
       "dl": "Q1",
-      "done": false,
-      "doneAt": null,
-      "notes": "",
-      "comments": []
+      "done": true,
+      "doneAt": "2026-04-01T15:06:30.521585+00:00",
+      "notes": "Ben Hart marked HELP-97 Done in Linear (Apr 1)",
+      "comments": [],
+      "updated": "2026-04-01T15:06:30.521585+00:00"
     },
     {
       "id": "q1-44",

@@ -1,6 +1,6 @@
 {
-  "version": "ai-202604011906",
-  "lastUpdated": "2026-04-01T19:06:54.648961+00:00",
+  "version": "ai-202604012037",
+  "lastUpdated": "2026-04-01T20:37:09.361407+00:00",
   "items": [
     {
       "id": "q1-45",
@@ -740,6 +740,62 @@
       "comments": [],
       "created": "2026-04-01T19:06:54.648961+00:00",
       "updated": "2026-04-01T19:06:54.648961+00:00"
+    },
+    {
+      "id": "q1-54",
+      "q": "Q1",
+      "t": "Follow up with Atlantic Health System HIM team \u2014 duplication rates + biometric deduplication",
+      "desc": "From Apr 1 HHS Briefing. Follow up on biometric deduplication conversation with Atlantic Health System's HIM team. Gather duplication rate data to support patient matching narrative. Builds on the Mar 19 prep work (q1-45).",
+      "kr": "OKR 1",
+      "dl": "",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-04-01T20:37:09.361407+00:00",
+      "updated": "2026-04-01T20:37:09.361407+00:00"
+    },
+    {
+      "id": "q1-55",
+      "q": "Q1",
+      "t": "Send partner messaging + email content to marketing team (Convey Digital / Ladd)",
+      "desc": "From Apr 1 HHS Briefing with Ladd Martin + Convey Digital. Provide existing partner messaging and email content to support SI outreach and hospital FAQ materials. Clark Herman (Convey) to integrate into sales strategy.",
+      "kr": "OKR 3",
+      "dl": "",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-04-01T20:37:09.361407+00:00",
+      "updated": "2026-04-01T20:37:09.361407+00:00"
+    },
+    {
+      "id": "q2-28",
+      "q": "Q2",
+      "t": "Pursue SI outreach \u2014 CWD, Continuant, InterSystems, Cognizant (referral channels)",
+      "desc": "From Apr 1 HHS Briefing. Engage system integrators working in the Epic/healthcare space to build referral and co-sell channels. Targets: CWD, Continuant, InterSystems, Cognizant. Marketing support needed for messaging.",
+      "kr": "OKR 1",
+      "dl": "",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-04-01T20:37:09.361407+00:00",
+      "updated": "2026-04-01T20:37:09.361407+00:00"
+    },
+    {
+      "id": "q2-29",
+      "q": "Q2",
+      "t": "Clarify Clear's NIST compliance with reusable identity credentials \u2014 update team",
+      "desc": "From Apr 1 HHS Briefing. Determine whether Clear is actually compliant with NIST reusable identity credential rules. Vouched is positioned as the ONLY fully NIST-compliant IDV for healthcare \u2014 this needs to be airtight against competitive scrutiny.",
+      "kr": "OKR 3",
+      "dl": "",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-04-01T20:37:09.361407+00:00",
+      "updated": "2026-04-01T20:37:09.361407+00:00"
     }
   ]
 }

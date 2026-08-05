@@ -1,6 +1,6 @@
 {
   "version": "ai-202604012037",
-  "lastUpdated": "2026-04-01T20:37:09.361407+00:00",
+  "lastUpdated": "2026-08-05T19:03:33.359528+00:00",
   "items": [
     {
       "id": "q1-45",
@@ -796,6 +796,20 @@
       "comments": [],
       "created": "2026-04-01T20:37:09.361407+00:00",
       "updated": "2026-04-01T20:37:09.361407+00:00"
+    },
+    {
+      "id": "q1-46",
+      "q": "Q1",
+      "t": "Enhanced Liveness false-rejection defect: system reliability",
+      "desc": "DELIVERY BLOCKER: Enhanced Liveness (color-sequence selfie check) discovered broken with high false-rejection rate. System not differentiating flow drop-outs from genuine verification failures.\n\nRoot issue: Unaddressed persistent problem flagged as 'ticking time bomb' for services partners (per Gerard).\n\nRisk: If not fixed, false-rejection problem in live IDV flow will lose healthcare pilots, starting with WellSpan opportunity.\n\nAction required:\n1. Assign fix owner and timeline to product/eng\n2. Track resolution as Q1 priority\n3. Coordinate with partnerships if any customer tests hit this defect\n\nContext: Every healthcare pilot (WellSpan, hospital partners, others) depends on selfie flow reliability. This blocks healthcare strategy execution.",
+      "kr": "Delivery Risk",
+      "dl": "Fix timeline TBD by product/eng",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-08-05T19:03:33.359480+00:00",
+      "updated": "2026-08-05T19:03:33.359522+00:00"
     }
   ]
 }

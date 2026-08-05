@@ -1,6 +1,6 @@
 {
   "version": "ai-202604012037",
-  "lastUpdated": "2026-08-05T19:03:33.359528+00:00",
+  "lastUpdated": "2026-08-05T20:48:46.410451+00:00",
   "items": [
     {
       "id": "q1-45",
@@ -810,6 +810,48 @@
       "comments": [],
       "created": "2026-08-05T19:03:33.359480+00:00",
       "updated": "2026-08-05T19:03:33.359522+00:00"
+    },
+    {
+      "id": "q1-56",
+      "q": "Q1",
+      "t": "LEAP pilot introduction (HIMSS/ONC) for Abstractive / Vince Hartman",
+      "desc": "LEAP pilot introduction for Abstractive Health and grant funding via HIMSS/ONC. Contact: Christine at HIMSS. Action: connect Vince Hartman once the handoff from Christine is confirmed.\n\nContext: Abstractive Health (AI medical-records summarization) is registering as an IAS with eHealth Exchange QHIN. LEAP pilot opportunity aligns with their grant funding path.",
+      "kr": "S1 IAS/CSP lane",
+      "dl": "By Wed Aug 14",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-08-05T20:48:46.410409+00:00",
+      "updated": "2026-08-05T20:48:46.410438+00:00"
+    },
+    {
+      "id": "q1-57",
+      "q": "Q1",
+      "t": "Send token integration documentation (OIDC token in SOAP XML) to Abstractive",
+      "desc": "Deliver token integration doc to Abstractive Health: how Abstractive embeds and stores the OIDC token in the outbound SOAP XML (relayed as a SAML id_token attribute per SOP 4.6d).\n\nOwner: Gerard\nContext: Abstractive is standing up as an IAS with eHealth Exchange QHIN. This doc unblocks their CSP-side integration with Vouched.",
+      "kr": "S1 IAS/CSP lane",
+      "dl": "By Wed Aug 14",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-08-05T20:48:46.410442+00:00",
+      "updated": "2026-08-05T20:48:46.410444+00:00"
+    },
+    {
+      "id": "q1-58",
+      "q": "Q1",
+      "t": "Get Sequoia answer on manual-review / failed-proofing flow, relay to Abstractive",
+      "desc": "Request definitive answer from Sequoia on the manual-review / failed-proofing flow (SOP v2.1 defines no remediation path).\n\nContext: Abstractive asked how to handle proofing failures in the TEFCA IAS Exchange flow. This is an open question for every CSP-side conversation.\n\nOnce answered, relay to Abstractive Health.\n\nOwner: Gerard",
+      "kr": "S1 IAS/CSP lane",
+      "dl": "By Wed Aug 14",
+      "done": false,
+      "doneAt": null,
+      "notes": "",
+      "comments": [],
+      "created": "2026-08-05T20:48:46.410446+00:00",
+      "updated": "2026-08-05T20:48:46.410448+00:00"
     }
   ]
 }

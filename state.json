@@ -1,6 +1,6 @@
 {
   "version": "ai-202604012037",
-  "lastUpdated": "2026-08-06T18:50:52.142357Z",
+  "lastUpdated": "2026-08-06T22:26:21.254506Z",
   "items": [
     {
       "id": "q1-45",
@@ -880,6 +880,62 @@
       "comments": [],
       "created": "2026-08-06T18:50:52.142357Z",
       "updated": "2026-08-06T18:50:52.142357Z"
+    },
+    {
+      "id": "q1-60",
+      "q": "Q1",
+      "t": "Call Alloy (Tim + team) on product performance",
+      "desc": "Direct conversation about fraud-model performance and customer concerns. Frame as raising the bar together. Key data point: 0.5% false-acceptance rate at best practices, 80,000 monthly jobs, new stable-ID model in progress. Do not let narrative drift to communication problem \u2014 it is a product issue. Goal: understand where they see failures and build recovery plan.",
+      "kr": "S2 Orchestration \u2014 Alloy",
+      "dl": "This week",
+      "done": false,
+      "doneAt": null,
+      "notes": "Owner: Gerard. Follow-up: hand off relationship mining to Dan rather than staying in email loop.",
+      "comments": [],
+      "created": "2026-08-06T22:26:21.254506Z",
+      "updated": "2026-08-06T22:26:21.254506Z"
+    },
+    {
+      "id": "q1-61",
+      "q": "Q1",
+      "t": "Ask Dan to handle Alloy relationship mining and account evaluation",
+      "desc": "Pull Dan in to extract detailed Alloy customer feedback and current account status. Dan is good at this; Gerard at capacity. Goal: understand what Alloy customers are seeing (fraud, performance, etc.) so Gerard can anchor the Tim call with real data.",
+      "kr": "S2 Orchestration \u2014 Alloy",
+      "dl": "Before Gerard calls Tim",
+      "done": false,
+      "doneAt": null,
+      "notes": "Owner: Gerard (assign to Dan). This unblocks the Alloy call.",
+      "comments": [],
+      "created": "2026-08-06T22:26:21.254506Z",
+      "updated": "2026-08-06T22:26:21.254506Z"
+    },
+    {
+      "id": "q1-62",
+      "q": "Q1",
+      "t": "Post OIDC/JWT documentation to product channel",
+      "desc": "Abstractive Health and other IAS partners are asking how the JWT token is issued and transmitted in TEFCA flows. This is not a new feature, just documentation of existing capability. IAS lane advancement depends on this. Post to product channel and triage to the right team.",
+      "kr": "S1 Healthcare \u2014 IAS/CSP lane",
+      "dl": "By Wed Aug 8",
+      "done": false,
+      "doneAt": null,
+      "notes": "Owner: Gerard (draft and post). This unblocks contract discussions with Abstractive Health, Flexpa, etc.",
+      "comments": [],
+      "created": "2026-08-06T22:26:21.254506Z",
+      "updated": "2026-08-06T22:26:21.254506Z"
+    },
+    {
+      "id": "q2-31",
+      "q": "Q2",
+      "t": "Establish FS/Orchestration Partnership OKR",
+      "desc": "Summit produced no FS/orchestration partnership OKRs, leaving Alloy repair untracked and unowned. Establish an OKR in the company OKR list tied to Alloy run-rate recovery target ($571,155 toward $750K). Name owners: Gerard + Dan. Add to Doc 05 (Partner Portfolio Diagnostic) as context.",
+      "kr": "S2 Orchestration \u2014 Company strategy",
+      "dl": "By end of Aug",
+      "done": false,
+      "doneAt": null,
+      "notes": "This is the single biggest gap surfaced in the Gerard-Marita 1:1. Without an OKR, Alloy repair runs on spare capacity instead of being a priority.",
+      "comments": [],
+      "created": "2026-08-06T22:26:21.254506Z",
+      "updated": "2026-08-06T22:26:21.254506Z"
     }
   ]
 }

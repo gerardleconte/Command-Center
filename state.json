@@ -1,6 +1,6 @@
 {
   "version": "ai-202604012037",
-  "lastUpdated": "2026-08-05T20:48:46.410451+00:00",
+  "lastUpdated": "2026-08-06T18:50:52.142357Z",
   "items": [
     {
       "id": "q1-45",
@@ -852,6 +852,34 @@
       "comments": [],
       "created": "2026-08-05T20:48:46.410446+00:00",
       "updated": "2026-08-05T20:48:46.410448+00:00"
+    },
+    {
+      "id": "q1-59",
+      "q": "Q1",
+      "t": "Deliver Seqster workflow data",
+      "desc": "Deliver the requested workflow data to Seqster for their async telemedicine onboarding flow. Data should cover: patient identity verification integration points, IAS data surface options, passkey embedding for clinical data, and Hims use-case specifics. This unblocks Dana's pricing tiers return (expected by Aug 20). Critical path for the joint GTM.",
+      "kr": "S1 Healthcare \u2014 Seqster",
+      "dl": "By Wed Aug 13",
+      "done": false,
+      "doneAt": null,
+      "notes": "Owner: Gerard. Called out in Seqster Partner Planner as Priority Action #1.",
+      "comments": [],
+      "created": "2026-08-06T18:50:52.142357Z",
+      "updated": "2026-08-06T18:50:52.142357Z"
+    },
+    {
+      "id": "q2-30",
+      "q": "Q2",
+      "t": "Chase Dana pricing tiers and qualify Hims",
+      "desc": "(1) Follow up with Dana Hosseini on tiered pricing ballparks for patient-registered vs. physician-registered access (expected by Aug 20). (2) Coordinate with Marita to qualify Hims on three unknowns: expected patient volume, number of clinical sites, and 1099 vs. employed physician model. Nothing advances to MVP scope without these inputs. Target completion: Aug 27.",
+      "kr": "S1 Healthcare \u2014 Seqster",
+      "dl": "By Wed Aug 27",
+      "done": false,
+      "doneAt": null,
+      "notes": "Owners: Gerard (Dana follow-up), Marita (Hims qualification). Called out in Seqster Partner Planner as Priority Actions #2\u20133.",
+      "comments": [],
+      "created": "2026-08-06T18:50:52.142357Z",
+      "updated": "2026-08-06T18:50:52.142357Z"
     }
   ]
 }
